@@ -29,6 +29,7 @@ export default class Bday extends Component {
           members.map(member => {
             let bdate = member.birthday.slice(-5);
             bdays[bdate] = {name:member.name, icon:member.square_image};
+            return bdate;
           });
           this.setState({"members":members,"birthdays":bdays,"doneLoading":true});
           return members;
@@ -49,7 +50,7 @@ export default class Bday extends Component {
   dateCell(dateString) {
     // return dateString;
     let isTodayFormat = "cell";
-    if(dateString==this.state.today) {
+    if(dateString===this.state.today) {
       isTodayFormat += " today";
     }
     if(this.state.birthdays[dateString]) {
