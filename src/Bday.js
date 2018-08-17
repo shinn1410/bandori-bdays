@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Bday.css';
+import Active from './Active';
 
 // const API_ROOT = "https://bandori.party/api/members/";
 const API_ROOT = "https://bandori.party/api/members/";
@@ -28,7 +29,7 @@ export default class Bday extends Component {
           let bdays = this.state.birthdays;
           members.map(member => {
             let bdate = member.birthday.slice(-5);
-            bdays[bdate] = {name:member.name, icon:member.square_image};
+            bdays[bdate] = {name:member.name, icon:member.square_image, chibi:member.image};
             return bdate;
           });
           this.setState({"members":members,"birthdays":bdays,"doneLoading":true});
@@ -50,14 +51,20 @@ export default class Bday extends Component {
   dateCell(dateString) {
     // return dateString;
     let isTodayFormat = "cell";
+    let current = this.state.birthdays[dateString];
     if(dateString===this.state.today) {
       isTodayFormat += " today";
     }
-    if(this.state.birthdays[dateString]) {
-      console.log("birthday found!");
+    if(current) {
+      console.log(current);
       return (
         <td className={isTodayFormat} id={dateString} key={dateString}>
-          <img className="icon" src={this.state.birthdays[dateString].icon} alt={this.state.birthdays[dateString].name} title={this.state.birthdays[dateString].name}/>
+          <img className="icon"
+            src={current.icon}
+            alt={current.name}
+            title={current.name}
+            onClick={()=>alert(current.name,dateString)}
+          />
         </td>
       );
     }
@@ -90,17 +97,21 @@ export default class Bday extends Component {
             <td>{month.name}</td>
             {arr.map((i)=>{
               let dayString = ("0"+(i+1)).slice(-2);
-              return this.dateCell(monthString+dayString)
+              return this.dateCell(monthString+dayString);
             })}
           </tr>);
       });
       return (
-        <table className="bday">
-          <tbody>
-            { calendar }
-          </tbody>
-        </table>
+        <div>
+          <table className="bday">
+            <tbody>
+              { calendar }
+            </tbody>
+          </table>
+          <Active character={this.state.birthdays[this.state.today]}/>
+        </div>
       );
+      // <Active character={this.state.birthdays["03-20"]}/>
     }
     else {
       return (<p>Loading...</p>);

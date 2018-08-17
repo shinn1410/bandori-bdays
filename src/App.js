@@ -7,7 +7,7 @@ export default class App extends Component {
     console.log("Entered App.render()")
     return (
       <div className="app">
-        <Bday id="mainTable" />
+        <Bday />
       </div>
     );
   }
